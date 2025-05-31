@@ -1,5 +1,6 @@
 import React from 'react';
 import { ReactNode } from 'react';
+import APIOrchestratorHeader from '../components/Header/APIOrchestratorHeader';
 
 type HomeLayoutProps = {
   children: ReactNode;
@@ -8,7 +9,7 @@ type HomeLayoutProps = {
 const HomeLayout = ({ children }: HomeLayoutProps) => {
   return (
     <div className="home-layout">
-      <h1>Start</h1>
+      <APIOrchestratorHeader />
       <main className="home-content">
         {children}
       </main>
