@@ -17,7 +17,7 @@ const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     return null;
   }
 
-  return <Theme theme="g100">{children}</Theme>;
+  return <Theme theme="g10">{children}</Theme>;
 };
 
 export default ThemeWrapper;

@@ -12,3 +12,6 @@ export { default as HeaderMenuItem } from '@carbon/react/es/components/UIShell/H
 export { default as SkipToContent } from '@carbon/react/es/components/UIShell/SkipToContent.js';
 export { default as SideNav } from '@carbon/react/es/components/UIShell/SideNav.js';
 export { default as SideNavItems } from '@carbon/react/es/components/UIShell/SideNavItems.js';
+export { default as ContainedList } from '@carbon/react/es/components/ContainedList/ContainedList.js'
+export { default as ContainedListItem } from '@carbon/react/es/components/ContainedList/ContainedListItem/ContainedListItem.js'
+export { default as Tag } from '@carbon/react/es/components/Tag/Tag.js'

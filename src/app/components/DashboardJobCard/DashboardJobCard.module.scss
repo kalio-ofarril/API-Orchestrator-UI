@@ -1,0 +1,47 @@
+.dashboard-job-card {
+  padding-top: 1rem;
+  min-height: 10vh; // or whatever height fits your design
+}
+
+.dashboard-job-card:hover {
+  cursor: pointer;
+}
+
+.dashboard-job-card-icon {
+  margin-right: 0.5rem;
+}
+
+.job-card-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%; // needed to make space-between meaningful
+}
+
+.status-icon {
+  margin-right: 0.25rem; // optional spacing
+  vertical-align: middle;
+}
+
+.status-active {
+  fill: #24a148; // Green (Carbon's green-60)
+}
+
+.status-inactive {
+  fill: #8d8d8d; // Gray (Carbon's gray-50)
+}
+
+.dashboard-job-card-icon-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.job-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // or use gap if you prefer
+  gap: 1rem;
+  float: left;
+}
