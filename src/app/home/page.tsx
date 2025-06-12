@@ -1,43 +1,74 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import Link from 'next/link';
-import { Grid, Column } from '@carbon/react';
+import { ContainedList, ContainedListItem } from '../../lib/carbon-shell';
+import DashboardJobCard from '../components/DashboardJobCard/DashboardJobCard';
+
+import { getAllDashboardData } from '../api/dashboard.api';
+import { DashboardData } from '@/types/DashboardData';
+
+import styles from './home.module.scss';
+import { Button, Column, Grid, Search, Tile } from '@carbon/react';
+import { Add } from '@carbon/icons-react';
+import DashboardSummary from '../components/DashboardSummary/DashboardSummay';
 
 const HomePage = () => {
+  const [allDashoardData, setAllDashboardData] = useState<DashboardData>({
+    jobs: [],
+    groupColorMap: {},
+  });
+
+  useEffect(() => {
+    getAllDashboardData().then(setAllDashboardData);
+  }, []);
+
   return (
-    <Grid className="landing-page" fullWidth>
-      <Column lg={16} md={8} sm={4} className="landing-page__banner">
-        1
-      </Column>
-      <Column lg={16} md={8} sm={4} className="landing-page__r2">
-        <Grid className="tabs-group-content">
-          <Column md={4} lg={7} sm={4} className="landing-page__tab-content">
-            7/16
-          </Column>
-          <Column md={4} lg={{ span: 8, offset: 8 }} sm={4}>
-            8/16
-          </Column>
-        </Grid>
-      </Column>
-      <Column lg={16} md={8} sm={4} className="landing-page__r3">
-        <Grid>
-          <Column md={4} lg={4} sm={4}>
-            1/4
-          </Column>
-          <Column md={4} lg={4} sm={4}>
-            1/4
-          </Column>
-          <Column md={4} lg={4} sm={4}>
-            1/4
-          </Column>
-          <Column md={4} lg={4} sm={4}>
-            1/4
-          </Column>
-        </Grid>
-      </Column>
-    </Grid>
+    <>
+      <Grid className={styles['dashboard-header']}>
+        <Column lg={12}>
+          <h2 className={styles['dashboard-title']}>Job Control Panel</h2>
+          <p className={styles['dashboard-subtitle']}>
+            Monitor status and manage execution of your team’s API jobs.
+          </p>
+        </Column>
+      </Grid>
+
+      <DashboardSummary
+        total={allDashoardData.jobs.length}
+        active={allDashoardData.jobs.filter((o) => o.isActive).length}
+        failed={allDashoardData.jobs.filter((o) => !o.lastRunSuccessful).length}
+        inactive={allDashoardData.jobs.filter((o) => !o.isActive).length}
+      />
+
+      <Search
+        placeholder="Filter"
+        // value={searchTerm}
+        // onChange={handleChange}
+        closeButtonLabelText="Clear search input"
+        size="lg"
+        labelText="Filter search"
+      />
+      <ContainedList
+        className={styles['job-list-container']}
+        kind="on-page"
+        label="Scheduled Jobs"
+        size="lg"
+        action={
+          <Button iconDescription="Add" renderIcon={Add} tooltipPosition="left">
+            Create Job
+          </Button>
+        }>
+        {allDashoardData.jobs.map((job) => (
+          <ContainedListItem key={job.id}>
+            <DashboardJobCard
+              data={job}
+              groupColor={allDashoardData.groupColorMap[job.group]}
+            />
+          </ContainedListItem>
+        ))}
+      </ContainedList>
+    </>
   );
 };
 

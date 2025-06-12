@@ -1,0 +1,17 @@
+.dashboard-summary {
+    background-color: #f4f4f4; // gray-10 on gray-10 page = light separation
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #161616; // or use Carbon token
+}
+
+.dashboard-summary-grid{
+    padding: 0rem;
+}
+
+
+.section-divider {
+    border-bottom: 1px solid #e0e0e0; // Carbon gray-20
+    margin: 0.5rem 0; // Spacing before and after
+}

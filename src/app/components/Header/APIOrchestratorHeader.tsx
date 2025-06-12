@@ -47,7 +47,7 @@ const APIOrchestratorHeader = () => {
               onPointerLeaveCapture={undefined}>
               <SideNavItems>
                 <HeaderSideNavItems>
-                  <HeaderMenuItem href="/repos">Repositories</HeaderMenuItem>
+                  <HeaderMenuItem href="/repos">Schedulers</HeaderMenuItem>
                 </HeaderSideNavItems>
               </SideNavItems>
             </SideNav>

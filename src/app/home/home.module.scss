@@ -1,0 +1,33 @@
+.home-content {
+    min-height: 100vh;
+    max-height: 100vh;
+    padding: 5rem 6rem 2rem;
+    overflow: hidden;
+    // background: #e0e0e0;
+}
+
+.dashboard-header{
+    padding: 0rem;
+}
+
+.job-list-container {
+    max-height: 85vh;
+
+    ul {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+}
+
+.dashboard-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #161616; // or use Carbon token
+}
+
+.dashboard-subtitle {
+    font-size: 0.875rem;
+    color: #525252; // gray-70 for g10
+    margin-top: 0.25rem;
+}
