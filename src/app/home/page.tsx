@@ -12,8 +12,10 @@ import styles from './home.module.scss';
 import { Button, Column, Grid, Search, Tile } from '@carbon/react';
 import { Add } from '@carbon/icons-react';
 import DashboardSummary from '../components/DashboardSummary/DashboardSummay';
+import JobPanel from '../components/JobPanel/JobPanel';
 
 const HomePage = () => {
+  const [isJobPanelOpen, setJobPanelOpen] = useState(false);
   const [allDashoardData, setAllDashboardData] = useState<DashboardData>({
     jobs: [],
     groupColorMap: {},
@@ -25,6 +27,14 @@ const HomePage = () => {
 
   return (
     <>
+      {isJobPanelOpen && (
+        <JobPanel
+          mode={'Create'}
+          onClose={() => setJobPanelOpen(false)}
+          isVisible={isJobPanelOpen}
+        />
+      )}
+
       <Grid className={styles['dashboard-header']}>
         <Column lg={12}>
           <h2 className={styles['dashboard-title']}>Job Control Panel</h2>
@@ -55,7 +65,11 @@ const HomePage = () => {
         label="Scheduled Jobs"
         size="lg"
         action={
-          <Button iconDescription="Add" renderIcon={Add} tooltipPosition="left">
+          <Button
+            iconDescription="Add"
+            renderIcon={Add}
+            tooltipPosition="left"
+            onClick={() => setJobPanelOpen(!isJobPanelOpen)}>
             Create Job
           </Button>
         }>
