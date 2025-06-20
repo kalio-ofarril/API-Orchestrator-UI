@@ -1,0 +1,37 @@
+.job-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 35vw;
+  height: 100vh;
+  padding-top: 4rem;
+  background: #e0e0e0;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease-out;
+  z-index: 2;
+}
+
+.visible {
+  transform: translateX(0%);
+}
+
+.hidden {
+  transform: translateX(100%);
+}
+
+.job-panel-grid {
+  height: 100%;
+  padding: 0rem;
+}
+
+.job-panel-title {
+  width: 100%;
+  height: 5rem;
+  padding: 1rem;
+}
+
+.job-panel-form-column {
+  height: 100%;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
