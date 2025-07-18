@@ -1,7 +1,14 @@
 import { DashboardData } from '@/types/DashboardData';
+import api from './axios';
 
 export const getAllDashboardData = async (): Promise<DashboardData> => {
-  return {
+  const response = await api.get<DashboardData>('/dashboard');
+  return response.data;
+};
+
+
+/*
+ {
     jobs: [
       {
         id: 0,
@@ -107,3 +114,4 @@ export const getAllDashboardData = async (): Promise<DashboardData> => {
     },
   };
 };
+*/
