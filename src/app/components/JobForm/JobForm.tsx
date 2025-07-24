@@ -11,16 +11,36 @@ import {
 
 import styles from './JobForm.module.scss';
 import cronstrue from 'cronstrue';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Information } from '@carbon/icons-react';
+import { createJob } from '@/app/api/job.api';
+import { JobFormData } from '@/types/JobFormData';
 
-const JobForm = ({ onClose }) => {
-  const jobNameRef = useRef<HTMLInputElement>(null);
-  const groupRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const endpointRef = useRef<HTMLInputElement>(null);
-  const [cronExpression, setCronExpression] = useState('');
-  const [isActive, setIsActive] = useState(true);
+interface JobFormProps {
+  onClose: () => void;
+  refreshDashboard: () => void;
+  jobPanelData: JobFormData;
+  mode: String;
+}
+
+const JobForm: React.FC<JobFormProps> = ({
+  onClose,
+  refreshDashboard,
+  jobPanelData,
+  mode,
+}) => {
+  const [validForm, setValidForm] = useState(false);
+  const [jobFormData, setJobFormData] = useState<JobFormData>(jobPanelData);
+
+  // Update form data only when jobPanelData changes (e.g., switching between edit/create)
+  useEffect(() => {
+    setJobFormData(jobPanelData);
+  }, [jobPanelData]);
+
+  // Validate form whenever jobFormData changes
+  useEffect(() => {
+    setValidForm(validateForm(jobFormData));
+  }, [jobFormData]);
 
   const getCronDescription = (expression: string): string => {
     try {
@@ -30,21 +50,44 @@ const JobForm = ({ onClose }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // prevent default browser reload
+  const validateForm = (data: JobFormData): boolean => {
+    console.log('in validate');
+    return (
+      data.name.trim() !== '' &&
+      data.groupTag.trim() !== '' &&
+      data.description.trim() !== '' &&
+      data.endpoint.trim() !== '' &&
+      data.cronExpression.trim() !== '' &&
+      getCronDescription(data.cronExpression) !== 'Invalid cron expression'
+    );
+  };
 
-    const jobPayload = {
-      name: jobNameRef.current?.value,
-      group: groupRef.current?.value,
-      description: descriptionRef.current?.value,
-      endpoint: endpointRef.current?.value,
-      cronExpression,
-      isActive,
-    };
+  const resetForm = () => {
+    setJobFormData({
+      name: '',
+      groupTag: '',
+      description: '',
+      endpoint: '',
+      cronExpression: '',
+      owner: '',
+      active: true,
+    });
+  };
 
-    console.log('Submitting job:', jobPayload);
+  const handleChange = (key: keyof JobFormData, value: string | boolean) => {
+    setJobFormData((prev) => ({ ...prev, [key]: value }));
+  };
 
-    // 🔁 TODO: Send this payload to backend via fetch or Axios
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await createJob(jobFormData);
+      refreshDashboard();
+      onClose();
+      resetForm();
+    } catch (err) {
+      console.error('Failed to create job', err);
+    }
   };
 
   return (
@@ -57,31 +100,48 @@ const JobForm = ({ onClose }) => {
             className={styles['job-form']}>
             <Stack gap={2} className={styles['job-form']}>
               <div className={styles['job-form-name-row']}>
-                <TextInput id="jobName" labelText="Job Name" ref={jobNameRef} />
+                <TextInput
+                  id="jobName"
+                  labelText="Job Name"
+                  value={jobFormData.name}
+                  onChange={(e) => handleChange('name', e.target.value)}
+                  disabled={mode == 'View'}
+                />
 
                 <Toggle
                   id="isActive"
-                  defaultToggled
+                  toggled={jobFormData.active}
                   labelA="Off"
                   labelB="On"
                   labelText="Active"
-                  onToggle={() => setIsActive((prev) => !prev)}
+                  onToggle={(toggled) => handleChange('active', toggled)}
                   className={styles['job-form-active-toggle']}
+                  disabled={mode == 'View'}
                 />
               </div>
 
-              <TextInput id="group" labelText="Group" ref={groupRef} />
+              <TextInput
+                id="group"
+                labelText="Group"
+                value={jobFormData.groupTag}
+                onChange={(e) => handleChange('groupTag', e.target.value)}
+                disabled={mode == 'View'}
+              />
 
               <TextArea
                 id="description"
                 labelText="Description"
-                ref={descriptionRef}
+                value={jobFormData.description}
+                onChange={(e) => handleChange('description', e.target.value)}
+                disabled={mode == 'View'}
               />
 
               <TextInput
                 id="endpoint"
                 labelText="Target API Endpoint"
-                ref={endpointRef}
+                value={jobFormData.endpoint}
+                onChange={(e) => handleChange('endpoint', e.target.value)}
+                disabled={mode == 'View'}
               />
 
               <div className={styles['cron-label-container']}>
@@ -101,12 +161,13 @@ const JobForm = ({ onClose }) => {
 
               <TextInput
                 id="cron"
-                value={cronExpression}
-                onChange={(e) => setCronExpression(e.target.value)}
+                value={jobFormData.cronExpression}
+                onChange={(e) => handleChange('cronExpression', e.target.value)}
                 placeholder="e.g. 0 0 12 * * ?"
-                helperText={getCronDescription(cronExpression)}
+                helperText={getCronDescription(jobFormData.cronExpression)}
                 labelText={''}
                 className={styles['job-form-cron-input']}
+                disabled={mode == 'View'}
               />
 
               <div className={styles['form-footer']}>
@@ -116,7 +177,10 @@ const JobForm = ({ onClose }) => {
                   onClick={onClose}>
                   Close
                 </Button>
-                <Button type="submit" className={styles['job-form-button']}>
+                <Button
+                  type="submit"
+                  className={styles['job-form-button']}
+                  disabled={!validForm}>
                   Submit
                 </Button>
               </div>

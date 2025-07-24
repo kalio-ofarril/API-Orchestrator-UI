@@ -1,11 +1,11 @@
-export interface Job {
-  id: number;
+
+export interface JobFormData {
+  id?: number;
   name: string;
-  owner: string;
+  groupTag: string;
   description: string;
   endpoint: string;
   cronExpression: string;
-  groupTag: string;
+  owner: string;
   active: boolean;
-  lastRunSuccessful: boolean;
 }

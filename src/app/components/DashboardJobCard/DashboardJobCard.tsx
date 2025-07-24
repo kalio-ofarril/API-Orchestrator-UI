@@ -17,10 +17,10 @@ import {
   WatsonHealthRotate_360,
 } from '@carbon/icons-react';
 
-const DashboardJobCard = ({ data, groupColor }) => {
+const DashboardJobCard = ({ data, groupColor, toggleJobPanel }) => {
   const readableSchedule = cronstrue.toString(data.cronExpression);
 
-  const statusColorClass = data.isActive
+  const statusColorClass = data.active
     ? styles['status-active']
     : styles['status-inactive'];
 
@@ -56,7 +56,7 @@ const DashboardJobCard = ({ data, groupColor }) => {
               <DiamondFill
                 className={`${styles['status-icon']} ${statusColorClass}`}
               />
-              {data.isActive ? 'Active' : 'Inactive'}
+              {data.active ? 'Active' : 'Inactive'}
             </h6>
           </Column>
         </Column>
@@ -78,7 +78,7 @@ const DashboardJobCard = ({ data, groupColor }) => {
               size="md"
               title="Clear filter"
               type={groupColor}>
-              {data.group}
+              {data.groupTag}
             </Tag>
           </Column>
           <Column lg={16}>
@@ -111,7 +111,11 @@ const DashboardJobCard = ({ data, groupColor }) => {
                 type="button"
                 tabIndex={0}
                 className={styles['dashboard-job-card-icon-button']}
-                aria-label="View">
+                aria-label="View"
+                onClick={(e) => {
+                  console.log(e);
+                  toggleJobPanel(data, 'View');
+                }}>
                 <View size={24} className={styles['dashboard-job-card-icon']} />
               </button>
             </Tooltip>
@@ -120,7 +124,11 @@ const DashboardJobCard = ({ data, groupColor }) => {
                 type="button"
                 tabIndex={0}
                 className={styles['dashboard-job-card-icon-button']}
-                aria-label="Edit">
+                aria-label="Edit"
+                onClick={(e) => {
+                  console.log(e);
+                  toggleJobPanel(data, 'Edit');
+                }}>
                 <Edit size={24} className={styles['dashboard-job-card-icon']} />
               </button>
             </Tooltip>

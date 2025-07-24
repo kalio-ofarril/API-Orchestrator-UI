@@ -16,22 +16,36 @@ import JobPanel from '../components/JobPanel/JobPanel';
 
 const HomePage = () => {
   const [isJobPanelOpen, setJobPanelOpen] = useState(false);
+  const [jobPanelMode, setJobPanelMode] = useState('');
+  const [jobPanelData, setJobPanelData] = useState({});
   const [allDashoardData, setAllDashboardData] = useState<DashboardData>({
     jobs: [],
     groupColorMap: {},
   });
 
   useEffect(() => {
-    getAllDashboardData().then(setAllDashboardData);
+    refreshDashboard();
   }, []);
+
+  const refreshDashboard = () => {
+    getAllDashboardData().then(setAllDashboardData);
+  };
+
+  const toggleJobPanel = (data, mode) => {
+    setJobPanelMode(mode);
+    setJobPanelData(data);
+    setJobPanelOpen(!isJobPanelOpen);
+  };
 
   return (
     <>
       {isJobPanelOpen && (
         <JobPanel
-          mode={'Create'}
+          mode={jobPanelMode}
           onClose={() => setJobPanelOpen(false)}
           isVisible={isJobPanelOpen}
+          refreshDashboard={refreshDashboard}
+          jobPanelData={jobPanelData}
         />
       )}
 
@@ -46,9 +60,9 @@ const HomePage = () => {
 
       <DashboardSummary
         total={allDashoardData.jobs.length}
-        active={allDashoardData.jobs.filter((o) => o.isActive).length}
+        active={allDashoardData.jobs.filter((o) => o.active).length}
         failed={allDashoardData.jobs.filter((o) => !o.lastRunSuccessful).length}
-        inactive={allDashoardData.jobs.filter((o) => !o.isActive).length}
+        inactive={allDashoardData.jobs.filter((o) => !o.active).length}
       />
 
       <Search
@@ -69,7 +83,20 @@ const HomePage = () => {
             iconDescription="Add"
             renderIcon={Add}
             tooltipPosition="left"
-            onClick={() => setJobPanelOpen(!isJobPanelOpen)}>
+            onClick={() =>
+              toggleJobPanel(
+                {
+                  name: '',
+                  groupTag: '',
+                  description: '',
+                  endpoint: '',
+                  cronExpression: '',
+                  owner: '',
+                  active: true,
+                },
+                'Create'
+              )
+            }>
             Create Job
           </Button>
         }>
@@ -77,7 +104,8 @@ const HomePage = () => {
           <ContainedListItem key={job.id}>
             <DashboardJobCard
               data={job}
-              groupColor={allDashoardData.groupColorMap[job.group]}
+              groupColor={allDashoardData.groupColorMap[job.groupTag]}
+              toggleJobPanel={toggleJobPanel}
             />
           </ContainedListItem>
         ))}

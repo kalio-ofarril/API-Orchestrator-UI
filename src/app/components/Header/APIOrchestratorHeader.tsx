@@ -42,9 +42,10 @@ const APIOrchestratorHeader = () => {
               aria-label="Side navigation"
               expanded={isSideNavExpanded}
               isPersistent={false}
-              placeholder={undefined}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}>
+              // placeholder={undefined}
+              // onPointerEnterCapture={undefined}
+              // onPointerLeaveCapture={undefined}
+              >
               <SideNavItems>
                 <HeaderSideNavItems>
                   <HeaderMenuItem href="/repos">Schedulers</HeaderMenuItem>
