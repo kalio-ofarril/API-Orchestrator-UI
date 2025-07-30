@@ -1,0 +1,12 @@
+.status-icon {
+  margin-right: 0.25rem; // optional spacing
+  vertical-align: middle;
+}
+
+.status-success {
+  fill: #24a148; // Green (Carbon's green-60)
+}
+
+.status-failed {
+  fill: #fa4d56; // Gray (Carbon's gray-50)
+}

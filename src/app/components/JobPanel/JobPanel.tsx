@@ -1,13 +1,10 @@
 import React from 'react';
 
 import styles from './JobPanel.module.scss';
-import { Column, Grid } from '@carbon/react';
+import { Column } from '@carbon/react';
 import JobForm from '../JobForm/JobForm';
 
 const JobPanel = ({ mode, isVisible, onClose, refreshDashboard, jobPanelData }) => {
-
-  console.log('JobPanel class:', isVisible ? 'visible' : 'hidden');
-
   return (
     <div
       className={`${styles['job-panel']} ${

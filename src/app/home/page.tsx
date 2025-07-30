@@ -13,11 +13,14 @@ import { Button, Column, Grid, Search, Tile } from '@carbon/react';
 import { Add } from '@carbon/icons-react';
 import DashboardSummary from '../components/DashboardSummary/DashboardSummay';
 import JobPanel from '../components/JobPanel/JobPanel';
+import JobLogsModal from '../components/JobLogsModal/JobLogsModal';
 
 const HomePage = () => {
   const [isJobPanelOpen, setJobPanelOpen] = useState(false);
+  const [jobLogsModalOpen, setJobLogsModalOpen] = useState(false);
   const [jobPanelMode, setJobPanelMode] = useState('');
   const [jobPanelData, setJobPanelData] = useState({});
+  const [jobLogData, setJobLogData] = useState({});
   const [allDashoardData, setAllDashboardData] = useState<DashboardData>({
     jobs: [],
     groupColorMap: {},
@@ -37,8 +40,16 @@ const HomePage = () => {
     setJobPanelOpen(!isJobPanelOpen);
   };
 
+  const handleModalOpen = (data) => {
+    console.log(data)
+    setJobLogData(data);
+    setJobLogsModalOpen(!jobLogsModalOpen);
+  }
+
   return (
     <>
+      <JobLogsModal open={jobLogsModalOpen} data={jobLogData} handleModalOpen={handleModalOpen}/>
+
       {isJobPanelOpen && (
         <JobPanel
           mode={jobPanelMode}
@@ -65,14 +76,14 @@ const HomePage = () => {
         inactive={allDashoardData.jobs.filter((o) => !o.active).length}
       />
 
-      <Search
+      {/* <Search
         placeholder="Filter"
         // value={searchTerm}
         // onChange={handleChange}
         closeButtonLabelText="Clear search input"
         size="lg"
         labelText="Filter search"
-      />
+      /> */}
       <ContainedList
         className={styles['job-list-container']}
         kind="on-page"
@@ -106,6 +117,8 @@ const HomePage = () => {
               data={job}
               groupColor={allDashoardData.groupColorMap[job.groupTag]}
               toggleJobPanel={toggleJobPanel}
+              refreshDashboard={refreshDashboard}
+              handleModalOpen={handleModalOpen}
             />
           </ContainedListItem>
         ))}
