@@ -32,12 +32,10 @@ const JobForm: React.FC<JobFormProps> = ({
   const [validForm, setValidForm] = useState(false);
   const [jobFormData, setJobFormData] = useState<JobFormData>(jobPanelData);
 
-  // Update form data only when jobPanelData changes (e.g., switching between edit/create)
   useEffect(() => {
     setJobFormData(jobPanelData);
   }, [jobPanelData]);
 
-  // Validate form whenever jobFormData changes
   useEffect(() => {
     setValidForm(validateForm(jobFormData));
   }, [jobFormData]);

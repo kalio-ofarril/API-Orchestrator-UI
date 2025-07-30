@@ -17,12 +17,38 @@ import {
   WatsonHealthRotate_360,
 } from '@carbon/icons-react';
 
-const DashboardJobCard = ({ data, groupColor, toggleJobPanel }) => {
+import { deleteJob, triggerJob } from '@/app/api/job.api';
+
+const DashboardJobCard = ({
+  data,
+  groupColor,
+  toggleJobPanel,
+  refreshDashboard,
+  handleModalOpen
+}) => {
   const readableSchedule = cronstrue.toString(data.cronExpression);
 
   const statusColorClass = data.active
     ? styles['status-active']
     : styles['status-inactive'];
+
+  const deleteJobHandler = async () => {
+    try {
+      await deleteJob(data);
+      refreshDashboard();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const triggerJobHandler = async () => {
+    try {
+      await triggerJob(data);
+      refreshDashboard();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div>
@@ -87,7 +113,10 @@ const DashboardJobCard = ({ data, groupColor, toggleJobPanel }) => {
                 type="button"
                 tabIndex={0}
                 className={styles['dashboard-job-card-icon-button']}
-                aria-label="Logs">
+                aria-label="Logs"
+                onClick={(e) => {
+                  handleModalOpen(data)
+                }}>
                 <Catalog
                   size={24}
                   className={styles['dashboard-job-card-icon']}
@@ -99,7 +128,10 @@ const DashboardJobCard = ({ data, groupColor, toggleJobPanel }) => {
                 type="button"
                 tabIndex={0}
                 className={styles['dashboard-job-card-icon-button']}
-                aria-label="Trigger">
+                aria-label="Trigger"
+                onClick={(e) => {
+                  triggerJobHandler();
+                }}>
                 <WatsonHealthRotate_360
                   size={24}
                   className={styles['dashboard-job-card-icon']}
@@ -113,7 +145,6 @@ const DashboardJobCard = ({ data, groupColor, toggleJobPanel }) => {
                 className={styles['dashboard-job-card-icon-button']}
                 aria-label="View"
                 onClick={(e) => {
-                  console.log(e);
                   toggleJobPanel(data, 'View');
                 }}>
                 <View size={24} className={styles['dashboard-job-card-icon']} />
@@ -126,7 +157,6 @@ const DashboardJobCard = ({ data, groupColor, toggleJobPanel }) => {
                 className={styles['dashboard-job-card-icon-button']}
                 aria-label="Edit"
                 onClick={(e) => {
-                  console.log(e);
                   toggleJobPanel(data, 'Edit');
                 }}>
                 <Edit size={24} className={styles['dashboard-job-card-icon']} />
@@ -137,7 +167,10 @@ const DashboardJobCard = ({ data, groupColor, toggleJobPanel }) => {
                 type="button"
                 tabIndex={0}
                 className={styles['dashboard-job-card-icon-button']}
-                aria-label="Delete">
+                aria-label="Delete"
+                onClick={(e) => {
+                  deleteJobHandler();
+                }}>
                 <TrashCan
                   size={24}
                   className={styles['dashboard-job-card-icon']}
