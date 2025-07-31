@@ -35,7 +35,7 @@ const JobLogCard = ({ data }) => {
           <p>{data.runTimestamp}</p>
         </Column>
         <Column lg={16}>
-            <p>{data.errorMessage}</p>
+            {data.errorMessage ? (<p><h6>Error Message:</h6> {data.errorMessage}</p>) : <p></p>}
         </Column>
       </Grid>
     </div>

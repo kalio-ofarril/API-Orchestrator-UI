@@ -9,7 +9,7 @@ import { getAllDashboardData } from '../api/dashboard.api';
 import { DashboardData } from '@/types/DashboardData';
 
 import styles from './home.module.scss';
-import { Button, Column, Grid, Search, Tile } from '@carbon/react';
+import { Button, Column, Grid, ToastNotification } from '@carbon/react';
 import { Add } from '@carbon/icons-react';
 import DashboardSummary from '../components/DashboardSummary/DashboardSummay';
 import JobPanel from '../components/JobPanel/JobPanel';
@@ -18,6 +18,7 @@ import JobLogsModal from '../components/JobLogsModal/JobLogsModal';
 const HomePage = () => {
   const [isJobPanelOpen, setJobPanelOpen] = useState(false);
   const [jobLogsModalOpen, setJobLogsModalOpen] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [jobPanelMode, setJobPanelMode] = useState('');
   const [jobPanelData, setJobPanelData] = useState({});
   const [jobLogData, setJobLogData] = useState({});
@@ -41,14 +42,32 @@ const HomePage = () => {
   };
 
   const handleModalOpen = (data) => {
-    console.log(data)
+    console.log(data);
     setJobLogData(data);
     setJobLogsModalOpen(!jobLogsModalOpen);
-  }
+  };
+
+  const handleSuccessJobTrigger = () => {
+    setShowSuccessToast(true);
+  };
 
   return (
     <>
-      <JobLogsModal open={jobLogsModalOpen} data={jobLogData} handleModalOpen={handleModalOpen}/>
+      {showSuccessToast && (
+        <ToastNotification
+          className={styles['job-manual-toast']}
+          title="Job triggered"
+          subtitle="The job was successfully triggered."
+          kind="success"
+          onCloseButtonClick={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      <JobLogsModal
+        open={jobLogsModalOpen}
+        data={jobLogData}
+        handleModalOpen={handleModalOpen}
+      />
 
       {isJobPanelOpen && (
         <JobPanel
@@ -119,6 +138,7 @@ const HomePage = () => {
               toggleJobPanel={toggleJobPanel}
               refreshDashboard={refreshDashboard}
               handleModalOpen={handleModalOpen}
+              handleSuccessJobTrigger={handleSuccessJobTrigger}
             />
           </ContainedListItem>
         ))}
