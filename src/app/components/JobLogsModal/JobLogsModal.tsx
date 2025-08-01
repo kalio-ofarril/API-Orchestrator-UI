@@ -15,9 +15,7 @@ const JobLogsModal = ({ open, data, handleModalOpen }) => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    console.log(data);
-    console.log(data.id);
-    getJobLogs(data).then(setLogs);
+    data.id !== undefined && getJobLogs(data).then(setLogs);
   }, [data]);
 
   return (

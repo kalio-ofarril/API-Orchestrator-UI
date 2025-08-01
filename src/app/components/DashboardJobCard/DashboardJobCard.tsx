@@ -24,7 +24,8 @@ const DashboardJobCard = ({
   groupColor,
   toggleJobPanel,
   refreshDashboard,
-  handleModalOpen
+  handleModalOpen,
+  handleSuccessJobTrigger
 }) => {
   const readableSchedule = cronstrue.toString(data.cronExpression);
 
@@ -45,6 +46,7 @@ const DashboardJobCard = ({
     try {
       await triggerJob(data);
       refreshDashboard();
+      handleSuccessJobTrigger();
     } catch (err) {
       console.log(err);
     }
