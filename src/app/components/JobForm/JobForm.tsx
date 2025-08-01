@@ -42,14 +42,17 @@ const JobForm: React.FC<JobFormProps> = ({
 
   const getCronDescription = (expression: string): string => {
     try {
-      return cronstrue.toString(expression);
+      if (expression.trim().split(/\s+/).length === 6) {
+        return cronstrue.toString(expression);
+      } else {
+        return 'Invalid cron expression';
+      }
     } catch {
       return 'Invalid cron expression';
     }
   };
 
   const validateForm = (data: JobFormData): boolean => {
-    console.log('in validate');
     return (
       data.name.trim() !== '' &&
       data.groupTag.trim() !== '' &&

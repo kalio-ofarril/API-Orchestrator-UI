@@ -6,11 +6,9 @@ import React from 'react';
 import { FC, ReactNode } from 'react';
 import { Theme } from '@carbon/react';
 import ThemeWrapper from './components/layout/ThemeWrapper';
+import APIOrchestratorHeader from './components/Header/APIOrchestratorHeader';
 
-// export const metadata = {
-//   title: 'Carbon + Next13',
-//   description: 'IBM Carbon Tutorial with NextJS 13',
-// };
+import styles from './home.module.scss';
 
 type RootLayoutProps = {
   children: ReactNode;
@@ -20,7 +18,12 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <ThemeWrapper>{children}</ThemeWrapper>
+        <ThemeWrapper>
+          <div className="home-layout">
+            <APIOrchestratorHeader />
+            <main className={styles['home-content']}>{children}</main>
+          </div>
+        </ThemeWrapper>
       </body>
     </html>
   );
